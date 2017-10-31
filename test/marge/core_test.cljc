@@ -28,6 +28,11 @@
     (t/is (= "###### Features"
              (markdown [:h6 "Features"])))))
 
+(t/deftest quotes
+  (t/testing "blockquote produces expected string"
+    (t/is (= "> Blockquotes are very handy"
+             (markdown [:blockquote "Blockquotes are very handy"])))))
+
 #?(:cljs
     (do
       (enable-console-print!)

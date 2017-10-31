@@ -8,8 +8,6 @@
   "
   {:author "Mark Woodhall"})
 
-;; headers
-
 (defn- pair->markdown
   [[node value]]
   (case node
@@ -18,7 +16,8 @@
     :h3 (str "### " value)
     :h4 (str "#### " value)
     :h5 (str "##### " value)
-    :h6 (str "###### " value)))
+    :h6 (str "###### " value)
+    :blockquote (str "> " value)))
 
 (defn markdown
   "Takes a sequence of nodes and produces markdown."

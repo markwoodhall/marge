@@ -21,5 +21,7 @@
     :h6 (str "###### " value)))
 
 (defn markdown
+  "Takes a sequence of nodes and produces markdown."
+  {:added "0.1.0"}
   [col]
   (reduce str (map pair->markdown(partition 2 col))))

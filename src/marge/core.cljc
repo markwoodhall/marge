@@ -17,6 +17,12 @@
   [value]
   (str "> " value))
 
+(defn- ordered-list
+  [col]
+  (->> col
+       (map-indexed #(str (inc %1) ". " %2 "\n"))
+       (reduce str)))
+
 (defn- pair->markdown
   [[node value]]
   (case node
@@ -33,7 +39,8 @@
     :###### (header 6 value)
     :h6 (header 6 value)
     :blockquote (blockquote value)
-    :> (blockquote value)))
+    :> (blockquote value)
+    :ol (ordered-list value)))
 
 (defn markdown
   "Takes a sequence of nodes and produces markdown."

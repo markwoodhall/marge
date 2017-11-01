@@ -47,6 +47,11 @@
     (t/is (= "> Blockquotes are very handy"
              (markdown [:> "Blockquotes are very handy"])))))
 
+(t/deftest lists
+  (t/testing "ordered list produces expected string"
+    (t/is (= "1. First item\n2. Second item\n"
+             (markdown [:ol ["First item" "Second item"]])))))
+
 #?(:cljs
     (do
       (enable-console-print!)

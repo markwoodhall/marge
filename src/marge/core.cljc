@@ -13,6 +13,10 @@
   (let [hashes (reduce str (repeat depth "#"))]
     (str hashes " " value)))
 
+(defn- blockquote
+  [value]
+  (str "> " value))
+
 (defn- pair->markdown
   [[node value]]
   (case node
@@ -28,7 +32,8 @@
     :h5 (header 5 value)
     :###### (header 6 value)
     :h6 (header 6 value)
-    :blockquote (str "> " value)))
+    :blockquote (blockquote value)
+    :> (blockquote value)))
 
 (defn markdown
   "Takes a sequence of nodes and produces markdown."

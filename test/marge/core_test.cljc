@@ -43,7 +43,9 @@
 (t/deftest quotes
   (t/testing "blockquote produces expected string"
     (t/is (= "> Blockquotes are very handy"
-             (markdown [:blockquote "Blockquotes are very handy"])))))
+             (markdown [:blockquote "Blockquotes are very handy"])))
+    (t/is (= "> Blockquotes are very handy"
+             (markdown [:> "Blockquotes are very handy"])))))
 
 #?(:cljs
     (do

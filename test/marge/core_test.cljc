@@ -42,6 +42,27 @@
     (t/is (= "+ First item\n+ Second item\n"
              (markdown [:ul ["First item" "Second item"]])))))
 
+(t/deftest links
+  (t/testing "inline link returns expected string"
+    (t/is (= "[I'm an inline-style link](https://www.google.com)"
+             (markdown [:link {:text "I'm an inline-style link" :url "https://www.google.com"}]))))
+  
+  (t/testing "inline link with title returns expected string"
+    (t/is (= "[I'm an inline-style link](https://www.google.com \"Google Homepage\")"
+             (markdown [:link 
+                        {:text "I'm an inline-style link" 
+                         :url "https://www.google.com" 
+                         :title "Google Homepage"}])))))
+
+(t/deftest composing-nodes
+  (t/testing "multiple nodes return the expected string"
+    (t/is (= "# Header\n\n1. First item\n2. Second item\n\n## Header 2"
+             (markdown [:h1 "Header"
+                        :br :br
+                        :ol ["First item" "Second item"]
+                        :br
+                        :h2 "Header 2"])))))
+
 #?(:cljs
     (do
       (enable-console-print!)

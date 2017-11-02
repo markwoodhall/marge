@@ -29,9 +29,15 @@
        (map #(str "+ " % "\n"))
        (reduce str)))
 
+(defn- link
+  [{:keys [text url title]}]
+  (let [pad-title (if (nil? title) "" (str " \"" title "\""))]
+    (str "[" text "](" url pad-title")")))
+
 (defn- pair->markdown
   [[node value]]
   (case node
+    :br (if (= value :br) "\n\n" "\n")
     :h1 (header 1 value)
     :h2 (header 2 value)
     :h3 (header 3 value)
@@ -40,10 +46,19 @@
     :h6 (header 6 value)
     :blockquote (blockquote value)
     :ol (ordered-list value)
-    :ul (unordered-list value)))
+    :ul (unordered-list value)
+    :link (link value)))
+
+(defn- balance-line-breaks
+  [col]
+  (mapcat
+    identity 
+    (map #(if (= (count %) 1)
+            [(first %) nil]
+            %) (partition-by #{:br} col))))
 
 (defn markdown
   "Takes a sequence of nodes and produces markdown."
   {:added "0.1.0"}
   [col]
-  (reduce str (map pair->markdown (partition 2 col))))
+  (reduce str (map pair->markdown (partition 2 (balance-line-breaks col)))))

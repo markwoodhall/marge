@@ -55,7 +55,7 @@
                          :title "Google Homepage"}])))))
 
 (t/deftest composing-nodes
-  (t/testing "multiple nodes return the expected string"
+  (t/testing "composing multiple nodes with line breaks"
     (t/is (= "# Header\n\n1. First item\n2. Second item\n\n## Header 2"
              (markdown [:h1 "Header"
                         :br :br

@@ -41,7 +41,7 @@
     (let [values (first value)
           syntax (name (first values))
           code (second values)]
-      (str "```" syntax "\n" value "\n```"))))
+      (str "```" syntax "\n" code "\n```"))))
 
 (defn- pair->markdown
   [[node value]]

@@ -60,7 +60,7 @@
              (markdown [:code
                         "<b>Some code</b>"]))))
   
-  (t/testing "block of code secifying syntax returns expected string"
+  (t/testing "block of code specifying syntax returns expected string"
     (t/is (= "```clojure\n(def data [1 2 3])\n```"
              (markdown [:code
                         {:clojure "(def data [1 2 3])"}])))))

@@ -54,6 +54,17 @@
                          :url "https://www.google.com" 
                          :title "Google Homepage"}])))))
 
+(t/deftest code
+  (t/testing "block of code returns expected string"
+    (t/is (= "```\n<b>Some code</b>\n```"
+             (markdown [:code
+                        "<b>Some code</b>"]))))
+  
+  (t/testing "block of code secifying syntax returns expected string"
+    (t/is (= "```clojure\n(def data [1 2 3])\n```"
+             (markdown [:code
+                        {:clojure "(def data [1 2 3])"}])))))
+
 (t/deftest composing-nodes
   (t/testing "composing multiple nodes with line breaks"
     (t/is (= "# Header\n\n1. First item\n2. Second item\n\n## Header 2"

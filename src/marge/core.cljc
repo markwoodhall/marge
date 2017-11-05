@@ -34,6 +34,15 @@
   (let [pad-title (if (nil? title) "" (str " \"" title "\""))]
     (str "[" text "](" url pad-title")")))
 
+(defn- code
+  [value]
+  (if (string? value)
+    (str "```\n" value "\n```")
+    (let [values (first value)
+          syntax (name (first values))
+          code (second values)]
+      (str "```" syntax "\n" value "\n```"))))
+
 (defn- pair->markdown
   [[node value]]
   (case node
@@ -47,7 +56,8 @@
     :blockquote (blockquote value)
     :ol (ordered-list value)
     :ul (unordered-list value)
-    :link (link value)))
+    :link (link value)
+    :code (code value)))
 
 (defn- balance-line-breaks
   [col]

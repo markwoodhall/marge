@@ -68,6 +68,12 @@ Markdown generation for Clojure and ClojureScript.
   ["$70" "$7000000" "$2"]]])
 ```
 
+| Product | Quantity | Price    |
+| ------- | -------- | -------- |
+| Coke    | 100      | $70      |
+| Fanta   | 10000000 | $7000000 |
+| Lilt    | 1        | $2       |
+
 ### Composition
 
 ```clojure

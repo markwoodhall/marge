@@ -29,7 +29,7 @@ Markdown generation for Clojure and ClojureScript.
  [:blockquote "Something quote worthy!"])
 ```
 
-> Something quote worth!
+> Something quote worthy!
 
 ### Lists
 

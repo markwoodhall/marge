@@ -12,7 +12,7 @@
 (defn- header
   [depth value]
   (let [hashes (reduce str (repeat depth "#"))]
-    (str hashes " " value)))
+    (str hashes " " value "\n")))
 
 (defn- blockquote
   [value]

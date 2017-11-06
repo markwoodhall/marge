@@ -5,27 +5,27 @@
 
 (t/deftest headers
   (t/testing "h1 headers produces expected string"
-    (t/is (= "# Refactoring"
+    (t/is (= "# Refactoring\n"
              (markdown [:h1 "Refactoring"]))))
 
   (t/testing "h2 headers produces expected string"
-    (t/is (= "## Testing"
+    (t/is (= "## Testing\n"
              (markdown [:h2 "Testing"]))))
 
   (t/testing "h3 headers produces expected string"
-    (t/is (= "### Documenting"
+    (t/is (= "### Documenting\n"
              (markdown [:h3 "Documenting"]))))
   
   (t/testing "h4 headers produces expected string"
-    (t/is (= "#### Supporting"
+    (t/is (= "#### Supporting\n"
              (markdown [:h4 "Supporting"]))))
   
   (t/testing "h5 headers produces expected string"
-    (t/is (= "##### Bug Fixing"
+    (t/is (= "##### Bug Fixing\n"
              (markdown [:h5 "Bug Fixing"]))))
   
   (t/testing "h6 headers produces expected string"
-    (t/is (= "###### Features"
+    (t/is (= "###### Features\n"
              (markdown [:h6 "Features"])))))
 
 (t/deftest quotes
@@ -109,7 +109,7 @@
 
 (t/deftest composing-nodes
   (t/testing "composing multiple nodes with line breaks"
-    (t/is (= "# Header\n\n1. First item\n2. Second item\n\n## Header 2"
+    (t/is (= "# Header\n\n\n1. First item\n2. Second item\n\n## Header 2\n"
              (markdown [:h1 "Header"
                         :br :br
                         :ol ["First item" "Second item"]

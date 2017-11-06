@@ -65,6 +65,48 @@
              (markdown [:code
                         {:clojure "(def data [1 2 3])"}])))))
 
+(t/deftest table
+  (t/testing "table returns expected string"
+    (t/is (= (str "| Tables | Are | Cool |\n"
+                  "| ------ | --- | ---- |\n"
+                  "| 0 1    | 0 2 | 0 3  |\n"
+                  "| 1 1    | 1 2 | 1 3  |\n")
+             (markdown [:table
+                        ["Tables" 
+                         ["0 1" "1 1"] 
+                         "Are" 
+                         ["0 2" "1 2"]
+                         "Cool"
+                         ["0 3" "1 3"]]]))))
+  
+  (t/testing "table with varying data returns expected string"
+    (t/is (= (str "| Product | Quantity | Price    |\n"
+                  "| ------- | -------- | -------- |\n"
+                  "| Coke    | 100      | $70      |\n"
+                  "| Fanta   | 10000000 | $7000000 |\n"
+                  "| Lilt    | 1        | $2       |\n")
+             (markdown [:table
+                        ["Product" 
+                         ["Coke" "Fanta" "Lilt"] 
+                         "Quantity" 
+                         ["100" "10000000" "1"]
+                         "Price"
+                         ["$70" "$7000000" "$2"]]]))))
+
+  (t/testing "table with non string data returns expected string"
+    (t/is (= (str "| Product | Quantity | Price    |\n"
+                  "| ------- | -------- | -------- |\n"
+                  "| Coke    | 100      | $70      |\n"
+                  "| Fanta   | 10000000 | $7000000 |\n"
+                  "| Lilt    | 1        | $2       |\n")
+             (markdown [:table
+                        ["Product" 
+                         ["Coke" "Fanta" "Lilt"] 
+                         "Quantity" 
+                         [100 10000000 1]
+                         "Price"
+                         ["$70" "$7000000" "$2"]]])))))
+
 (t/deftest composing-nodes
   (t/testing "composing multiple nodes with line breaks"
     (t/is (= "# Header\n\n1. First item\n2. Second item\n\n## Header 2"

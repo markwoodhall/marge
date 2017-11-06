@@ -6,7 +6,8 @@
 
   You can also view [blog posts] (http://markw.xyz/tags/marge/) about marge
   "
-  {:author "Mark Woodhall"})
+  {:author "Mark Woodhall"}
+  (:require [clojure.string :refer [triml]]))
 
 (defn- header
   [depth value]
@@ -43,6 +44,34 @@
           code (second values)]
       (str "```" syntax "\n" code "\n```"))))
 
+(defn- pad
+  [padding value]
+  (str " | " (reduce str (take (count padding) (str value padding)))))
+
+(defn- column
+  [[col rows]]
+  (let [col-length (count col)
+        max-data-length (apply max (map (comp count str) rows))
+        max-length (max col-length max-data-length)
+        padding (reduce str (repeat max-length " "))]
+    {:header (pad padding col)
+     :divider (pad padding (reduce str (repeat max-length "-")))
+     :cells (map (partial pad padding) rows)}))
+
+(defn- table
+  [value]
+  (let [cols-and-rows (partition 2 value)
+        columns (map column cols-and-rows)
+        cells (apply interleave (map :cells columns))
+        cells-by-row (partition (count columns) cells)
+        rows (flatten (map #(triml ( str (reduce str %) " |\n")) cells-by-row))]
+    (str 
+      (triml (reduce str (map :header columns))) " |\n"
+      (triml (reduce str (map :divider columns))) " |\n"
+      (reduce 
+        str 
+        rows))))
+
 (defn- pair->markdown
   [[node value]]
   (case node
@@ -57,7 +86,8 @@
     :ol (ordered-list value)
     :ul (unordered-list value)
     :link (link value)
-    :code (code value)))
+    :code (code value)
+    :table (table value)))
 
 (defn- balance-line-breaks
   [col]

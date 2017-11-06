@@ -110,7 +110,18 @@
                          "Quantity" 
                          [100 10000000 1]
                          "Price"
-                         ["$70" "$7000000" "$2"]]])))))
+                         ["$70" "$7000000" "$2"]]]))))
+  
+  (t/testing "table with no rows returns expected result"
+    (t/is (= (str "| Product | Quantity | Price |\n"
+                  "| ------- | -------- | ----- |\n")
+             (markdown [:table
+                        ["Product" 
+                         [] 
+                         "Quantity" 
+                         []
+                         "Price"
+                         []]])))))
 
 (t/deftest composing-nodes
   (t/testing "composing multiple nodes with line breaks"

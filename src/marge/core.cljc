@@ -51,7 +51,9 @@
 (defn- column
   [[col rows]]
   (let [col-length (count col)
-        max-data-length (apply max (map (comp count str) rows))
+        max-data-length (if (empty? rows) 
+                          0 
+                          (apply max (map (comp count str) rows)))
         max-length (max col-length max-data-length)
         padding (reduce str (repeat max-length " "))]
     {:header (pad padding col)

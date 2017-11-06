@@ -76,6 +76,7 @@
   [[node value]]
   (case node
     :br (if (= value :br) "\n\n" "\n")
+    :p (str value "\n")
     :h1 (header 1 value)
     :h2 (header 2 value)
     :h3 (header 3 value)

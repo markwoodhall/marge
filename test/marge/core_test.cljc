@@ -3,6 +3,11 @@
             #?(:clj  [clojure.test :as t])
             [marge.core :refer [markdown]]))
 
+(t/deftest paragraph
+  (t/testing "p produces expected string"
+    (t/is (= "Paragraph\n"
+             (markdown [:p "Paragraph"])))))
+
 (t/deftest headers
   (t/testing "h1 headers produces expected string"
     (t/is (= "# Refactoring\n"

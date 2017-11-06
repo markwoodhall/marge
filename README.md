@@ -1,5 +1,5 @@
 # marge
-Markdown generation for Clojure
+Markdown generation for Clojure and ClojureScript.
 
 ## Status
 

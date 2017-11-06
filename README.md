@@ -17,8 +17,10 @@ Markdown generation for Clojure and ClojureScript.
 
 ```clojure
 (marge/markdown 
- [:h1 "My Heading"])
+ [:h4 "My Heading"])
 ```
+
+#### My Heading
 
 ### Quotes
 
@@ -26,6 +28,8 @@ Markdown generation for Clojure and ClojureScript.
 (marge/markdown
  [:blockquote "Something quote worthy!"])
 ```
+
+> Something quote worth!
 
 ### Lists
 
@@ -37,6 +41,12 @@ Markdown generation for Clojure and ClojureScript.
  [:ul ["Item 1" "Item 2"]])
 ```
 
+1. Item 1
+2. Item 2
+
++ Item 1
++ Item 2
+
 ### Links
 
 ```clojure
@@ -47,12 +57,18 @@ Markdown generation for Clojure and ClojureScript.
    :url "https://www.google.com"}])
 ```
 
+[I'm an inline-style link](https://www.google.com "Google Homepage")
+
 ### Code
 
 ```clojure
 (marge/markdown 
  [:code
   {:clojure "(def data [1 2 3])"}])
+```
+
+```clojure
+(def data [1 2 3])
 ```
 
 ### Tables

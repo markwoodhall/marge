@@ -110,13 +110,13 @@ Markdown generation for Clojure and ClojureScript.
 
 ```clojure
 (markdown 
-[:table
- ["Product" 
-  ["Coke" "Fanta" "Lilt"] 
-  "Quantity" 
-  ["100" "10000000" "1"]
-  "Price"
-  ["$70" "$7000000" "$2"]]])
+  [:table
+   ["Product" 
+    ["Coke" "Fanta" "Lilt"] 
+    "Quantity" 
+    ["100" "10000000" "1"]
+    "Price"
+    ["$70" "$7000000" "$2"]]])
 ```
 
 | Product | Quantity | Price    |
@@ -124,6 +124,21 @@ Markdown generation for Clojure and ClojureScript.
 | Coke    | 100      | $70      |
 | Fanta   | 10000000 | $7000000 |
 | Lilt    | 1        | $2       |
+
+
+#### Markdown in a table
+
+```clojure
+(markdown 
+  [:table
+   ["Title" 
+    ["link"]
+    "Links" 
+    [:link {:url "url" :text "text"}]]])
+
+| Title | Links       |
+| ----- | ----------- |
+| link  | [text](url) |
 
 ### Composition
 

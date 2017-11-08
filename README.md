@@ -135,6 +135,7 @@ Markdown generation for Clojure and ClojureScript.
     ["link"]
     "Links" 
     [:link {:url "url" :text "text"}]]])
+```
 
 | Title | Links       |
 | ----- | ----------- |

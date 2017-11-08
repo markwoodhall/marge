@@ -9,7 +9,7 @@
   {:author "Mark Woodhall"}
   (:require [clojure.string :refer [triml]]))
 
-(declare ordered-list unordered-list)
+(declare pair->markdown ordered-list unordered-list)
 
 (defn- header
   [depth value]
@@ -70,17 +70,32 @@
   [padding value]
   (str " | " (reduce str (take (count padding) (str value padding)))))
 
+(defn parse-rows
+  [rows]
+  (let [uniform-rows (if (odd? (count rows))
+                       (conj rows nil)
+                       rows)]
+    (flatten 
+      (map (fn map-rows 
+             [[c cn]]
+             (if (keyword? c)
+               (pair->markdown [c cn])
+               (if cn
+                 [c cn]
+                 c))) (partition 2 uniform-rows)))))
+
 (defn- column
   [[col rows]]
-  (let [col-length (count col)
-        max-data-length (if (empty? rows) 
+  (let [parsed-rows (parse-rows rows)
+        col-length (count col)
+        max-data-length (if (empty? parsed-rows) 
                           0 
-                          (apply max (map (comp count str) rows)))
+                          (apply max (map (comp count str) parsed-rows)))
         max-length (max col-length max-data-length)
         padding (reduce str (repeat max-length " "))]
     {:header (pad padding col)
      :divider (pad padding (reduce str (repeat max-length "-")))
-     :cells (map (partial pad padding) rows)}))
+     :cells (map (partial pad padding) parsed-rows)}))
 
 (defn- table
   [value]

@@ -112,6 +112,14 @@
                          ["0 2" "1 2"]
                          "Cool"
                          ["0 3" "1 3"]]]))))
+
+  (t/testing "table with nested structures returns expected string"
+    (t/is (= (str "| Tables      |\n"
+                  "| ----------- |\n"
+                  "| [text](url) |\n")
+             (markdown [:table
+                        ["Tables" 
+                         [:link {:url "url" :text "text"}]]]))))
   
   (t/testing "table with varying data returns expected string"
     (t/is (= (str "| Product | Quantity | Price    |\n"

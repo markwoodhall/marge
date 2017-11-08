@@ -7,6 +7,6 @@
           :namespaces [marge.core]
           :source-uri "https://github.com/markwoodhall/marge/blob/master/src/{classpath}#L{line}"}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.9.93"]]
+                 [org.clojure/clojurescript "1.9.908"]]
   :jar-exclusions [#"\.swp|\.swo|user.clj"]
   :source-paths ["src"])

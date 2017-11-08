@@ -1,6 +1,6 @@
 (ns marge.core-test
-  (:require #?(:cljs [cljs.test :as t])
-            #?(:clj  [clojure.test :as t])
+  (:require #?(:cljs [cljs.test :as t]
+               :clj  [clojure.test :as t])
             [marge.core :refer [markdown]]))
 
 (t/deftest paragraph
@@ -113,12 +113,22 @@
                          "Cool"
                          ["0 3" "1 3"]]]))))
 
-  (t/testing "table with nested structures returns expected string"
-    (t/is (= (str "| Tables      |\n"
-                  "| ----------- |\n"
-                  "| [text](url) |\n")
+  (t/testing "table with one column returns expected string"
+    (t/is (= (str "| Title |\n"
+                  "| ----- |\n"
+                  "| link  |\n")
              (markdown [:table
-                        ["Tables" 
+                        ["Title" 
+                         ["link"]]]))))
+
+  (t/testing "table with nested structures returns expected string"
+    (t/is (= (str "| Title | Links       |\n"
+                  "| ----- | ----------- |\n"
+                  "| link  | [text](url) |\n")
+             (markdown [:table
+                        ["Title" 
+                         ["link"]
+                         "Links" 
                          [:link {:url "url" :text "text"}]]]))))
   
   (t/testing "table with varying data returns expected string"

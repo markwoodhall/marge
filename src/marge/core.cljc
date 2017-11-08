@@ -70,7 +70,7 @@
   [padding value]
   (str " | " (reduce str (take (count padding) (str value padding)))))
 
-(defn parse-rows
+(defn- parse-rows
   [rows]
   (let [uniform-rows (if (odd? (count rows))
                        (conj rows nil)

@@ -61,18 +61,6 @@ Markdown generation for Clojure and ClojureScript.
   + Sub Item 2
 2. Item 2
 
-```clojure
-(marge/markdown
- [:ol ["Item 1" 
-       [:ol "Sub Item 1" "Sub Item 2"]
-       "Item 2"]])
-```
-
-1. Item 1
-  1. Sub Item 1
-  2. Sub Item 2
-2. Item 2
-
 ### Links
 
 ```clojure

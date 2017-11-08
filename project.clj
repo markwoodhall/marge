@@ -1,4 +1,4 @@
-(defproject marge "0.5.0"
+(defproject marge "0.6.0"
   :description "A library to generate markdown using Clojure data structures, hiccup for markdown."
   :url "http://github.com/markwoodhall/marge"
   :license {:name "The MIT License"

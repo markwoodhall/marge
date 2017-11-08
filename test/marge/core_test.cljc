@@ -42,6 +42,30 @@
   (t/testing "ordered list produces expected string"
     (t/is (= "1. First item\n2. Second item\n"
              (markdown [:ol ["First item" "Second item"]]))))
+    
+  (t/testing "nested unordered list in ordered list produces expected string"
+    (t/is (= "1. First item\n  + First Sub Item\n  + Second Sub Item\n2. Second Item\n"
+             (markdown [:ol ["First item" 
+                             [:ul ["First Sub Item" "Second Sub Item"]] 
+                             "Second Item"]]))))
+
+  (t/testing "nested ordered list in ordered list produces expected string"
+    (t/is (= "1. First item\n  1. First Sub Item\n  2. Second Sub Item\n2. Second Item\n"
+             (markdown [:ol ["First item" 
+                             [:ol ["First Sub Item" "Second Sub Item"]] 
+                             "Second Item"]]))))
+
+  (t/testing "nested ordered list in unordered list produces expected string"
+    (t/is (= "+ First item\n  1. First Sub Item\n  2. Second Sub Item\n+ Second Item\n"
+             (markdown [:ul ["First item" 
+                             [:ol ["First Sub Item" "Second Sub Item"]] 
+                             "Second Item"]]))))
+
+  (t/testing "nested unordered list in unordered list produces expected string"
+    (t/is (= "+ First item\n  + First Sub Item\n  + Second Sub Item\n+ Second Item\n"
+             (markdown [:ul ["First item" 
+                             [:ul ["First Sub Item" "Second Sub Item"]] 
+                             "Second Item"]]))))
   
   (t/testing "unordered list produces expected string"
     (t/is (= "+ First item\n+ Second item\n"

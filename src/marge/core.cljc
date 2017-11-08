@@ -9,6 +9,8 @@
   {:author "Mark Woodhall"}
   (:require [clojure.string :refer [triml]]))
 
+(declare ordered-list unordered-list)
+
 (defn- header
   [depth value]
   (let [hashes (reduce str (repeat depth "#"))]
@@ -19,16 +21,36 @@
   (str "> " value))
 
 (defn- ordered-list
-  [col]
-  (->> col
-       (map-indexed #(str (inc %1) ". " %2 "\n"))
-       (reduce str)))
+  ([col]
+   (ordered-list col 0))
+  ([col depth]
+   (let [position (atom 0)]
+     (->> col
+          (map
+            (fn map-ordered-list [v]
+              (if (vector? v)
+                (if (= :ol (first v))
+                  (ordered-list (second v) (inc depth))
+                  (unordered-list (second v) (inc depth)))
+                (let [padding (apply str (repeat (* depth 2) " "))]
+                  (swap! position inc)
+                  (str padding @position ". " v "\n")))))
+          (reduce str)))))
 
 (defn- unordered-list
-  [col]
-  (->> col
-       (map #(str "+ " % "\n"))
-       (reduce str)))
+  ([col]
+   (unordered-list col 0))
+  ([col depth]
+   (->> col
+        (map 
+          (fn map-unordered-list [v]
+            (if (vector? v)
+              (if (= :ol (first v))
+                (ordered-list (second v) (inc depth))
+                (unordered-list (second v) (inc depth)))
+              (let [padding (apply str (repeat (* depth 2) " "))]
+                (str padding "+ " v "\n")))))
+        (reduce str))))
 
 (defn- link
   [{:keys [text url title]}]

@@ -100,6 +100,7 @@
   [[node value]]
   (case node
     :br (if (= value :br) "\n\n" "\n")
+    :hr (if (= value :hr) "---\n---" "---")
     :p (str value "\n")
     :h1 (header 1 value)
     :h2 (header 2 value)
@@ -114,16 +115,16 @@
     :code (code value)
     :table (table value)))
 
-(defn- balance-line-breaks
+(defn- balance-singulars
   [col]
   (mapcat
     identity 
     (map #(if (= (count %) 1)
             [(first %) nil]
-            %) (partition-by #{:br} col))))
+            %) (partition-by #{:br :hr} col))))
 
 (defn markdown
   "Takes a sequence of nodes and produces markdown."
   {:added "0.1.0"}
   [col]
-  (reduce str (map pair->markdown (partition 2 (balance-line-breaks col)))))
+  (reduce str (map pair->markdown (partition 2 (balance-singulars col)))))

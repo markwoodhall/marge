@@ -8,6 +8,11 @@
     (t/is (= "Paragraph\n"
              (markdown [:p "Paragraph"])))))
 
+(t/deftest rulers
+  (t/testing "hr produces expected string"
+    (t/is (= "---"
+             (markdown [:hr])))))
+
 (t/deftest headers
   (t/testing "h1 headers produces expected string"
     (t/is (= "# Refactoring\n"
@@ -149,11 +154,13 @@
 
 (t/deftest composing-nodes
   (t/testing "composing multiple nodes with line breaks"
-    (t/is (= "# Header\n\n\n1. First item\n2. Second item\n\n## Header 2\n"
+    (t/is (= "# Header\n\n\n---1. First item\n2. Second item\n\n---## Header 2\n"
              (markdown [:h1 "Header"
                         :br :br
+                        :hr
                         :ol ["First item" "Second item"]
                         :br
+                        :hr
                         :h2 "Header 2"])))))
 
 #?(:cljs

@@ -83,6 +83,15 @@ Markdown generation for Clojure and ClojureScript.
    :url "https://www.google.com"}])
 ```
 
+### Horizontal Rule
+
+```clojure
+(marge/markdown 
+ [:hr])
+```
+
+---
+
 [I'm an inline-style link](https://www.google.com "Google Homepage")
 
 ### Code

@@ -7,7 +7,8 @@
   You can also view [blog posts] (http://markw.xyz/tags/marge/) about marge
   "
   {:author "Mark Woodhall"}
-  (:require [clojure.string :refer [triml]]))
+  (:require [clojure.string :refer [triml]]
+            [marge.util :refer [balance-at balance-when longest]]))
 
 (declare pair->markdown ordered-list unordered-list)
 
@@ -70,27 +71,26 @@
   [padding value]
   (str " | " (reduce str (take (count padding) (str value padding)))))
 
+(defn- parse-cells
+  [[c cn]]
+  (if (keyword? c)
+    (pair->markdown [c cn])
+    (if cn
+      [c cn]
+      c)))
+
 (defn- parse-rows
   [rows]
-  (let [uniform-rows (if (odd? (count rows))
-                       (conj rows nil)
-                       rows)]
-    (flatten 
-      (map (fn map-rows 
-             [[c cn]]
-             (if (keyword? c)
-               (pair->markdown [c cn])
-               (if cn
-                 [c cn]
-                 c))) (partition 2 uniform-rows)))))
+  (->> (balance-when (comp odd? count) nil rows)
+       (partition 2)
+       (map parse-cells)
+       (flatten)))
 
 (defn- column
   [[col rows]]
   (let [parsed-rows (parse-rows rows)
         col-length (count col)
-        max-data-length (if (empty? parsed-rows) 
-                          0 
-                          (apply max (map (comp count str) parsed-rows)))
+        max-data-length (longest parsed-rows)
         max-length (max col-length max-data-length)
         padding (reduce str (repeat max-length " "))]
     {:header (pad padding col)
@@ -103,7 +103,7 @@
         columns (map column cols-and-rows)
         cells (apply interleave (map :cells columns))
         cells-by-row (partition (count columns) cells)
-        rows (flatten (map #(triml ( str (reduce str %) " |\n")) cells-by-row))]
+        rows (flatten (map #(triml (str (reduce str %) " |\n")) cells-by-row))]
     (str 
       (triml (reduce str (map :header columns))) " |\n"
       (triml (reduce str (map :divider columns))) " |\n"
@@ -130,16 +130,8 @@
     :code (code value)
     :table (table value)))
 
-(defn- balance-singulars
-  [col]
-  (mapcat
-    identity 
-    (map #(if (= (count %) 1)
-            [(first %) nil]
-            %) (partition-by #{:br :hr} col))))
-
 (defn markdown
   "Takes a sequence of nodes and produces markdown."
   {:added "0.1.0"}
   [col]
-  (reduce str (map pair->markdown (partition 2 (balance-singulars col)))))
+  (reduce str (map pair->markdown (partition 2 (balance-at #{:br :hr} col)))))

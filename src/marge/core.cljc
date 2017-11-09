@@ -10,7 +10,7 @@
   (:require [clojure.string :refer [triml]]
             [marge.util :refer [balance-at balance-when longest]]))
 
-(declare pair->markdown ordered-list unordered-list)
+(declare pair->markdown list- ordered-list unordered-list)
 
 (defn- header
   [depth value]
@@ -21,21 +21,25 @@
   [value]
   (str "> " value))
 
+(defn list- 
+  [depth render-fn v]
+  (if (vector? v)
+    (if (= :ol (first v))
+      (ordered-list (second v) (inc depth))
+      (unordered-list (second v) (inc depth)))
+    (let [padding (apply str (repeat (* depth 2) " "))]
+      (render-fn padding v))))
+
 (defn- ordered-list
   ([col]
    (ordered-list col 0))
   ([col depth]
-   (let [position (atom 0)]
+   (let [position (atom 0)
+         render-fn #(do (swap! position inc) 
+                        (str %1 @position ". " %2 "\n"))
+         list-fn (partial list- depth render-fn)]
      (->> col
-          (map
-            (fn map-ordered-list [v]
-              (if (vector? v)
-                (if (= :ol (first v))
-                  (ordered-list (second v) (inc depth))
-                  (unordered-list (second v) (inc depth)))
-                (let [padding (apply str (repeat (* depth 2) " "))]
-                  (swap! position inc)
-                  (str padding @position ". " v "\n")))))
+          (map list-fn)
           (reduce str)))))
 
 (defn- unordered-list
@@ -44,13 +48,7 @@
   ([col depth]
    (->> col
         (map 
-          (fn map-unordered-list [v]
-            (if (vector? v)
-              (if (= :ol (first v))
-                (ordered-list (second v) (inc depth))
-                (unordered-list (second v) (inc depth)))
-              (let [padding (apply str (repeat (* depth 2) " "))]
-                (str padding "+ " v "\n")))))
+          (partial list- depth #(str %1 "+ " %2 "\n")))
         (reduce str))))
 
 (defn- link
@@ -69,7 +67,10 @@
 
 (defn- pad
   [padding value]
-  (str " | " (reduce str (take (count padding) (str value padding)))))
+  (->> (str value padding)
+       (take (count padding))
+       (apply str)
+       (str " | ")))
 
 (defn- parse-cells
   [[c cn]]

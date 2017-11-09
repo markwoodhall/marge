@@ -103,11 +103,11 @@
         columns (map column cols-and-rows)
         cells (apply interleave (map :cells columns))
         cells-by-row (partition (count columns) cells)
-        rows (flatten (map #(triml (str (reduce str %) " |\n")) cells-by-row))]
+        rows (flatten (map #(triml (str (apply str %) " |\n")) cells-by-row))]
     (str 
-      (triml (reduce str (map :header columns))) " |\n"
-      (triml (reduce str (map :divider columns))) " |\n"
-      (reduce 
+      (triml (apply str (map :header columns))) " |\n"
+      (triml (apply str (map :divider columns))) " |\n"
+      (apply 
         str 
         rows))))
 

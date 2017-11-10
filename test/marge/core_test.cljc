@@ -77,10 +77,14 @@
              (markdown [:ul ["First item" "Second item"]])))))
 
 (t/deftest links
+  (t/testing "achor returns expected string"
+    (t/is (= "<a name=\"anchor\"></a>" 
+             (markdown [:anchor "anchor"]))))
+
   (t/testing "inline link returns expected string"
     (t/is (= "[I'm an inline-style link](https://www.google.com)"
              (markdown [:link {:text "I'm an inline-style link" :url "https://www.google.com"}]))))
-  
+
   (t/testing "inline link with title returns expected string"
     (t/is (= "[I'm an inline-style link](https://www.google.com \"Google Homepage\")"
              (markdown [:link 

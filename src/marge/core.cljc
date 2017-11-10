@@ -63,6 +63,10 @@
   (let [pad-title (if (nil? title) "" (str " \"" title "\""))]
     (str "[" text "](" url pad-title")")))
 
+(defn- anchor
+  [value]
+  (str "<a name=\"" value "\"></a>"))
+
 (defn- code
   [value]
   (if (string? value)
@@ -148,6 +152,7 @@
     :ol (ordered-list value)
     :ul (unordered-list value)
     :link (link value)
+    :anchor (anchor value)
     :code (code value)
     :table (table value)))
 

@@ -12,16 +12,17 @@
 
 (declare pair->markdown list- ordered-list unordered-list)
 
-(defn- linebreak
-  ([]
-  (linebreak 1))
-  ([n]
-   (apply str (repeat n "\n"))))
+(def linebreak "\n")
+(def column-end " |")
+(def divider "-")
+(def whitespace " ")
+(def rule (str divider divider divider))
+(def column-start " | ") ;; We trim the leading space when rendering a row
 
 (defn- header
   [depth value]
   (let [hashes (apply str (repeat depth "#"))]
-    (str hashes " " value (linebreak))))
+    (str hashes whitespace value linebreak)))
 
 (defn- blockquote
   [value]
@@ -33,7 +34,7 @@
     (if (= :ol (first v))
       (ordered-list (second v) (inc depth))
       (unordered-list (second v) (inc depth)))
-    (let [padding (apply str (repeat (* depth 2) " "))]
+    (let [padding (apply str (repeat (* depth 2) whitespace))]
       (list-fn padding v))))
 
 (defn- ordered-list
@@ -41,7 +42,7 @@
    (ordered-list col 0))
   ([col depth]
    (let [position (atom 1)
-         render-fn #(str %1 @position ". " %2 (linebreak))
+         render-fn #(str %1 @position ". " %2 linebreak)
          position-fn #(do (swap! position inc) %)
          list-fn (partial list- depth (comp position-fn render-fn))]
      (->> col
@@ -54,7 +55,7 @@
   ([col depth]
    (->> col
         (map 
-          (partial list- depth #(str %1 "+ " %2 (linebreak))))
+          (partial list- depth #(str %1 "+ " %2 linebreak)))
         (apply str))))
 
 (defn- link
@@ -65,26 +66,28 @@
 (defn- code
   [value]
   (if (string? value)
-    (str "```" (linebreak) value (linebreak) "```")
+    (str "```" linebreak value linebreak "```")
     (let [values (first value)
           syntax (name (first values))
           code (second values)]
-      (str "```" syntax (linebreak) code (linebreak) "```"))))
+      (str "```" syntax linebreak code linebreak "```"))))
 
 (defn- pad
   [padding value]
   (->> (str value padding)
        (take (count padding))
-       (apply str)
-       (str " | ")))
+       (apply str)))
 
-(defn- rowbreak
-  ([]
-   (rowbreak ""))
-  ([s]
-   (str s " |" (linebreak))))
+(defn- end-row
+  [s]
+  (str s column-end linebreak))
 
-(defn- parse-cells
+(defn- col
+  [padding value]
+  (->> (pad padding value)
+       (str column-start)))
+
+(defn- parse-cell-pair
   [[c cn]]
   (if (keyword? c)
     (pair->markdown [c cn])
@@ -92,24 +95,31 @@
       [c cn]
       c)))
 
-(defn- parse-rows
-  [rows]
-  (->> (balance-when (comp odd? count) nil rows)
+(defn- parse-cells
+  [cells]
+  (->> (balance-when (comp odd? count) nil cells)
        (partition 2)
-       (map parse-cells)
+       (map parse-cell-pair)
        (flatten)))
 
 (defn- column
-  [[col rows]]
-  (let [parsed-rows (parse-rows rows)
-        col-length (count col)
-        max-data-length (longest parsed-rows)
+  [[column cells]]
+  (let [parsed-cells (parse-cells cells)
+        col-length (count column)
+        max-data-length (longest parsed-cells)
         max-length (max col-length max-data-length)
-        divider (apply str (repeat max-length "-"))
-        padding (apply str (repeat max-length " "))]
-    {:header (pad padding col)
-     :divider (pad padding divider)
-     :cells (map (partial pad padding) parsed-rows)}))
+        divider (apply str (repeat max-length divider))
+        padding (apply str (repeat max-length whitespace))]
+    {:header (col padding column) 
+     :divider (col padding divider) 
+     :cells (map (partial col padding) parsed-cells)}))
+
+(defn- row
+  [cells]
+  (->> (apply str cells)
+       (str)
+       (end-row)
+       (triml)))
 
 (defn- table
   [value]
@@ -117,12 +127,10 @@
         columns (map column cols-and-rows)
         cells (apply interleave (map :cells columns))
         cells-by-row (partition (count columns) cells)
-        rows (flatten (map (comp triml rowbreak str (partial apply str)) cells-by-row))]
+        rows (flatten (map row cells-by-row))]
     (str 
-      (triml (apply str (map :header columns)))
-      (rowbreak)
-      (triml (apply str (map :divider columns)))
-      (rowbreak)
+      (row (map :header columns))
+      (row (map :divider columns))
       (apply 
         str 
         rows))))
@@ -130,9 +138,9 @@
 (defn- pair->markdown
   [[node value]]
   (case node
-    :br (if (= value :br) (linebreak 2) (linebreak))
-    :hr (if (= value :hr) (str "---" (linebreak) "---") "---")
-    :p (str value (linebreak))
+    :br (if (= value :br) (str linebreak linebreak) linebreak)
+    :hr (if (= value :hr) (str rule linebreak rule) rule)
+    :p (str value linebreak)
     :h1 (header 1 value)
     :h2 (header 2 value)
     :h3 (header 3 value)

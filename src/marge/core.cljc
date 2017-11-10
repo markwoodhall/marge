@@ -12,35 +12,41 @@
 
 (declare pair->markdown list- ordered-list unordered-list)
 
+(defn- linebreak
+  ([]
+  (linebreak 1))
+  ([n]
+   (apply str (repeat n "\n"))))
+
 (defn- header
   [depth value]
-  (let [hashes (reduce str (repeat depth "#"))]
-    (str hashes " " value "\n")))
+  (let [hashes (apply str (repeat depth "#"))]
+    (str hashes " " value (linebreak))))
 
 (defn- blockquote
   [value]
   (str "> " value))
 
-(defn list- 
-  [depth render-fn v]
+(defn- list- 
+  [depth list-fn v]
   (if (vector? v)
     (if (= :ol (first v))
       (ordered-list (second v) (inc depth))
       (unordered-list (second v) (inc depth)))
     (let [padding (apply str (repeat (* depth 2) " "))]
-      (render-fn padding v))))
+      (list-fn padding v))))
 
 (defn- ordered-list
   ([col]
    (ordered-list col 0))
   ([col depth]
-   (let [position (atom 0)
-         render-fn #(do (swap! position inc) 
-                        (str %1 @position ". " %2 "\n"))
-         list-fn (partial list- depth render-fn)]
+   (let [position (atom 1)
+         render-fn #(str %1 @position ". " %2 (linebreak))
+         position-fn #(do (swap! position inc) %)
+         list-fn (partial list- depth (comp position-fn render-fn))]
      (->> col
           (map list-fn)
-          (reduce str)))))
+          (apply str)))))
 
 (defn- unordered-list
   ([col]
@@ -48,8 +54,8 @@
   ([col depth]
    (->> col
         (map 
-          (partial list- depth #(str %1 "+ " %2 "\n")))
-        (reduce str))))
+          (partial list- depth #(str %1 "+ " %2 (linebreak))))
+        (apply str))))
 
 (defn- link
   [{:keys [text url title]}]
@@ -59,11 +65,11 @@
 (defn- code
   [value]
   (if (string? value)
-    (str "```\n" value "\n```")
+    (str "```" (linebreak) value (linebreak) "```")
     (let [values (first value)
           syntax (name (first values))
           code (second values)]
-      (str "```" syntax "\n" code "\n```"))))
+      (str "```" syntax (linebreak) code (linebreak) "```"))))
 
 (defn- pad
   [padding value]
@@ -71,6 +77,12 @@
        (take (count padding))
        (apply str)
        (str " | ")))
+
+(defn- rowbreak
+  ([]
+   (rowbreak ""))
+  ([s]
+   (str s " |" (linebreak))))
 
 (defn- parse-cells
   [[c cn]]
@@ -93,9 +105,10 @@
         col-length (count col)
         max-data-length (longest parsed-rows)
         max-length (max col-length max-data-length)
-        padding (reduce str (repeat max-length " "))]
+        divider (apply str (repeat max-length "-"))
+        padding (apply str (repeat max-length " "))]
     {:header (pad padding col)
-     :divider (pad padding (reduce str (repeat max-length "-")))
+     :divider (pad padding divider)
      :cells (map (partial pad padding) parsed-rows)}))
 
 (defn- table
@@ -104,10 +117,12 @@
         columns (map column cols-and-rows)
         cells (apply interleave (map :cells columns))
         cells-by-row (partition (count columns) cells)
-        rows (flatten (map #(triml (str (apply str %) " |\n")) cells-by-row))]
+        rows (flatten (map (comp triml rowbreak str (partial apply str)) cells-by-row))]
     (str 
-      (triml (apply str (map :header columns))) " |\n"
-      (triml (apply str (map :divider columns))) " |\n"
+      (triml (apply str (map :header columns)))
+      (rowbreak)
+      (triml (apply str (map :divider columns)))
+      (rowbreak)
       (apply 
         str 
         rows))))
@@ -115,9 +130,9 @@
 (defn- pair->markdown
   [[node value]]
   (case node
-    :br (if (= value :br) "\n\n" "\n")
-    :hr (if (= value :hr) "---\n---" "---")
-    :p (str value "\n")
+    :br (if (= value :br) (linebreak 2) (linebreak))
+    :hr (if (= value :hr) (str "---" (linebreak) "---") "---")
+    :p (str value (linebreak))
     :h1 (header 1 value)
     :h2 (header 2 value)
     :h3 (header 3 value)
@@ -135,4 +150,4 @@
   "Takes a sequence of nodes and produces markdown."
   {:added "0.1.0"}
   [col]
-  (reduce str (map pair->markdown (partition 2 (balance-at #{:br :hr} col)))))
+  (apply str (map pair->markdown (partition 2 (balance-at #{:br :hr} col)))))

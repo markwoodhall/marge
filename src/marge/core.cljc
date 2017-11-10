@@ -7,7 +7,7 @@
   You can also view [blog posts] (http://markw.xyz/tags/marge/) about marge
   "
   {:author "Mark Woodhall"}
-  (:require [clojure.string :refer [triml]]
+  (:require [clojure.string :refer [triml join]]
             [marge.util :refer [balance-at balance-when longest]]))
 
 (declare pair->markdown list- ordered-list unordered-list)
@@ -21,7 +21,7 @@
 
 (defn- header
   [depth value]
-  (let [hashes (apply str (repeat depth "#"))]
+  (let [hashes (join (repeat depth "#"))]
     (str hashes whitespace value linebreak)))
 
 (defn- blockquote
@@ -34,7 +34,7 @@
     (if (= :ol (first v))
       (ordered-list (second v) (inc depth))
       (unordered-list (second v) (inc depth)))
-    (let [padding (apply str (repeat (* depth 2) whitespace))]
+    (let [padding (join (repeat (* depth 2) whitespace))]
       (list-fn padding v))))
 
 (defn- ordered-list
@@ -47,7 +47,7 @@
          list-fn (partial list- depth (comp position-fn render-fn))]
      (->> col
           (map list-fn)
-          (apply str)))))
+          (join)))))
 
 (defn- unordered-list
   ([col]
@@ -56,7 +56,7 @@
    (->> col
         (map 
           (partial list- depth #(str %1 "+ " %2 linebreak)))
-        (apply str))))
+        (join))))
 
 (defn- link
   [{:keys [text url title]}]
@@ -76,7 +76,7 @@
   [padding value]
   (->> (str value padding)
        (take (count padding))
-       (apply str)))
+       (join)))
 
 (defn- end-row
   [s]
@@ -108,16 +108,15 @@
         col-length (count column)
         max-data-length (longest parsed-cells)
         max-length (max col-length max-data-length)
-        divider (apply str (repeat max-length divider))
-        padding (apply str (repeat max-length whitespace))]
+        divider (join (repeat max-length divider))
+        padding (join (repeat max-length whitespace))]
     {:header (col padding column) 
      :divider (col padding divider) 
      :cells (map (partial col padding) parsed-cells)}))
 
 (defn- row
   [cells]
-  (->> (apply str cells)
-       (str)
+  (->> (join cells)
        (end-row)
        (triml)))
 
@@ -131,9 +130,7 @@
     (str 
       (row (map :header columns))
       (row (map :divider columns))
-      (apply 
-        str 
-        rows))))
+      (join rows))))
 
 (defn- pair->markdown
   [[node value]]
@@ -158,4 +155,4 @@
   "Takes a sequence of nodes and produces markdown."
   {:added "0.1.0"}
   [col]
-  (apply str (map pair->markdown (partition 2 (balance-at #{:br :hr} col)))))
+  (join (map pair->markdown (partition 2 (balance-at #{:br :hr} col)))))

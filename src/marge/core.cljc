@@ -160,4 +160,8 @@
   "Takes a sequence of nodes and produces markdown."
   {:added "0.1.0"}
   [col]
-  (join (map pair->markdown (partition 2 (balance-at #{:br :hr} col)))))
+  (->> col
+       (balance-at #{:br :hr})
+       (partition 2)
+       (map pair->markdown)
+       (join)))

@@ -67,14 +67,20 @@
   [value]
   (str "<a name=\"" value "\"></a>"))
 
+(defn- code-block
+  ([code]
+   (code-block "" code))
+  ([syntax code]
+   (str "```" syntax linebreak code linebreak "```")))
+
 (defn- code
   [value]
   (if (string? value)
-    (str "```" linebreak value linebreak "```")
+    (code-block value)
     (let [values (first value)
           syntax (name (first values))
           code (second values)]
-      (str "```" syntax linebreak code linebreak "```"))))
+      (code-block syntax code))))
 
 (defn- pad
   [padding value]

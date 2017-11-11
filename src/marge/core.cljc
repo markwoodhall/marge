@@ -101,7 +101,7 @@
 
 (defn- parse-cells
   [cells]
-  (->> (balance-when (comp odd? count) nil cells)
+  (->> (balance-when (comp odd? count) nil cells) ;; when cells collection in unbalanced pad with nil
        (partition 2)
        (map parse-cell-pair)
        (flatten)))

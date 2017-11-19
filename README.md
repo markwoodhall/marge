@@ -76,14 +76,6 @@ Markdown generation for Clojure and ClojureScript.
 
 ### Anchors
 
-```clojure
-(marge/markdown 
- [:link 
-  {:text "I'm an inline-style link" 
-   :title "Google Homepage"
-   :url "https://www.google.com"}])
-```
-
 Sometimes you might want to place an anchor that you link to later.
 
 ```clojure

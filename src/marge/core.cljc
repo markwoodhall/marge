@@ -28,7 +28,11 @@
   [value]
   (str "> " value))
 
-(defn- list- 
+(defn- strikethrough
+  [value]
+  (str "~~" value "~~"))
+
+(defn- list-
   [depth list-fn v]
   (if (vector? v)
     (if (= :ol (first v))
@@ -54,14 +58,14 @@
    (unordered-list col 0))
   ([col depth]
    (->> col
-        (map 
-          (partial list- depth #(str %1 "+ " %2 linebreak)))
+        (map
+         (partial list- depth #(str %1 "+ " %2 linebreak)))
         (join))))
 
 (defn- link
   [{:keys [text url title]}]
   (let [pad-title (if (nil? title) "" (str " \"" title "\""))]
-    (str "[" text "](" url pad-title")")))
+    (str "[" text "](" url pad-title ")")))
 
 (defn- anchor
   [value]
@@ -120,8 +124,8 @@
         max-length (max col-length max-data-length)
         divider (join (repeat max-length divider))
         padding (join (repeat max-length whitespace))]
-    {:header (col padding column) 
-     :divider (col padding divider) 
+    {:header (col padding column)
+     :divider (col padding divider)
      :cells (map (partial col padding) parsed-cells)}))
 
 (defn- row
@@ -137,10 +141,10 @@
         cells (apply interleave (map :cells columns))
         cells-by-row (partition (count columns) cells)
         rows (flatten (map row cells-by-row))]
-    (str 
-      (row (map :header columns))
-      (row (map :divider columns))
-      (join rows))))
+    (str
+     (row (map :header columns))
+     (row (map :divider columns))
+     (join rows))))
 
 (defn- pair->markdown
   [[node value]]
@@ -155,6 +159,7 @@
     :h5 (header 5 value)
     :h6 (header 6 value)
     :blockquote (blockquote value)
+    :strikethrough (strikethrough value)
     :ol (ordered-list value)
     :ul (unordered-list value)
     :link (link value)

@@ -1,6 +1,6 @@
 (ns marge.core-test
   (:require #? (:cljs [cljs.test :as t]
-                      :clj  [clojure.test :as t])
+                :clj  [clojure.test :as t])
             [marge.core :refer [markdown]]))
 
 (t/deftest paragraph

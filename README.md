@@ -38,7 +38,7 @@ Markdown generation for Clojure and ClojureScript.
  [:strikethrough "Done this!"])
 ```
 
-~~ Done this! ~~
+~~Done this!~~
 
 ### Lists
 

@@ -31,6 +31,15 @@ Markdown generation for Clojure and ClojureScript.
 
 > Something quote worthy!
 
+### Strikethrough
+
+```clojure
+(marge/markdown
+ [:strikethrough "Done this!"])
+```
+
+~~ Done this! ~~
+
 ### Lists
 
 ```clojure
@@ -60,6 +69,14 @@ Markdown generation for Clojure and ClojureScript.
   + Sub Item 1
   + Sub Item 2
 2. Item 2
+
+```clojure
+(marge/markdown
+ [:ul [{:done? true :task "Item 1"} {:done? false :task "Item 2"}]])
+```
+
++ [x] Item 1
++ [ ] Item 2
 
 ### Links
 

@@ -81,6 +81,11 @@
     (t/is (= "+ First item\n+ Second item\n"
              (markdown [:ul ["First item" "Second item"]])))))
 
+(t/deftest task-lists
+  (t/testing "task list produces expected string"
+    (t/is (= "+ [x] First item\n+ [ ] Second item\n"
+             (markdown [:ul [{:done? true :task "First item"} {:done? false :task "Second item"}]])))))
+
 (t/deftest links
   (t/testing "achor returns expected string"
     (t/is (= "<a name=\"anchor\"></a>"

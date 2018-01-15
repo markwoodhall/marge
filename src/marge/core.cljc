@@ -41,12 +41,22 @@
     (let [padding (join (repeat (* depth 2) whitespace))]
       (list-fn padding v))))
 
+(defn- list-entry
+  [l]
+  (if (map? l)
+    (str (if (:done? l)
+           "[x]"
+           "[ ]")
+         whitespace
+         (:task l))
+    l))
+
 (defn- ordered-list
   ([col]
    (ordered-list col 0))
   ([col depth]
    (let [position (atom 1)
-         render-fn #(str %1 @position ". " %2 linebreak)
+         render-fn #(str %1 @position ". " (list-entry %2) linebreak)
          position-fn #(do (swap! position inc) %)
          list-fn (partial list- depth (comp position-fn render-fn))]
      (->> col
@@ -59,7 +69,7 @@
   ([col depth]
    (->> col
         (map
-         (partial list- depth #(str %1 "+ " %2 linebreak)))
+         (partial list- depth #(str %1 "+ " (list-entry %2) linebreak)))
         (join))))
 
 (defn- link

@@ -71,6 +71,14 @@
                              [:ol ["First Sub Item" "Second Sub Item"]]
                              "Second Item"]]))))
 
+  (t/testing "ordered lists can contain more markdown nodes"
+    (t/is (= "1. First item\n2. [Second item](url)\n"
+             (markdown [:ol ["First item"
+                             [:link {:url "url" :text "Second item"}]]])))
+    (t/is (= "1. First item\n2. ~~Second item~~\n"
+             (markdown [:ol ["First item"
+                             [:strikethrough "Second item"]]]))))
+
   (t/testing "nested unordered list in unordered list produces expected string"
     (t/is (= "+ First item\n  + First Sub Item\n  + Second Sub Item\n+ Second Item\n"
              (markdown [:ul ["First item"
@@ -79,7 +87,15 @@
 
   (t/testing "unordered list produces expected string"
     (t/is (= "+ First item\n+ Second item\n"
-             (markdown [:ul ["First item" "Second item"]])))))
+             (markdown [:ul ["First item" "Second item"]]))))
+
+  (t/testing "unordered lists can contain more markdown nodes"
+    (t/is (= "+ First item\n+ [Second item](url)\n"
+             (markdown [:ul ["First item"
+                             [:link {:url "url" :text "Second item"}]]])))
+    (t/is (= "+ First item\n+ ~~Second item~~\n"
+             (markdown [:ul ["First item"
+                             [:strikethrough "Second item"]]])))))
 
 (t/deftest task-lists
   (t/testing "task list produces expected string"

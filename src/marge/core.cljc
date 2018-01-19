@@ -35,9 +35,10 @@
 (defn- list-
   [depth list-fn v]
   (if (vector? v)
-    (if (= :ol (first v))
-      (ordered-list (second v) (inc depth))
-      (unordered-list (second v) (inc depth)))
+    (case (first v)
+      :ol (ordered-list (second v) (inc depth))
+      :ul (unordered-list (second v) (inc depth))
+      (list-fn (join (repeat (* depth 2) whitespace)) (pair->markdown v)))
     (let [padding (join (repeat (* depth 2) whitespace))]
       (list-fn padding v))))
 

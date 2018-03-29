@@ -1,10 +1,10 @@
 (ns ^{:clojure.tools.namespace.repl/load false} nrepl
   (:require
-   [clojure.tools.nrepl.server :as nrepl.server]
-   [cider.nrepl]
-   [cemerick.piggieback]
-   [refactor-nrepl.middleware :as refactor.nrepl]
-   [io.aviso.ansi]))
+    [clojure.tools.nrepl.server :as nrepl.server]
+    [cider.nrepl]
+    [cemerick.piggieback]
+    [refactor-nrepl.middleware :as refactor.nrepl]
+    [io.aviso.ansi]))
 
 (defn start-nrepl
   [opts]

@@ -12,12 +12,12 @@
 
 (declare pair->markdown list- ordered-list unordered-list)
 
-(defonce linebreak "\n")
-(defonce column-end " |")
-(defonce divider "-")
-(defonce whitespace " ")
-(defonce rule (str divider divider divider))
-(defonce column-start " | ") ;; We trim the leading space when rendering a row
+(defonce ^:private linebreak "\n")
+(defonce ^:private column-end " |")
+(defonce ^:private divider "-")
+(defonce ^:private whitespace " ")
+(defonce ^:private rule (str divider divider divider))
+(defonce ^:private column-start " | ") ;; We trim the leading space when rendering a row
 
 (defn- header
   [depth value]

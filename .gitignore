@@ -13,3 +13,5 @@ pom.xml.asc
 .lein-failures
 .nrepl-port
 .cljs_rhino_repl/
+.cpcache
+cljs-test-runner-out

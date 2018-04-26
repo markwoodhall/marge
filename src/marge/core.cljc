@@ -7,7 +7,7 @@
   You can also view [blog posts] (http://markw.xyz/tags/marge/) about marge
   "
   {:author "Mark Woodhall"}
-  (:require [clojure.string :refer [triml join]]
+  (:require [clojure.string :refer [join triml]]
             [marge.util :refer [balance-at balance-when longest]]))
 
 (declare pair->markdown list- ordered-list unordered-list)

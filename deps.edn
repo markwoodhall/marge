@@ -7,9 +7,7 @@
  {:dev
   {:extra-paths ["dev" "test"]
    :extra-deps
-   {cider/cider-nrepl {:mvn/version "0.16.0"}
-    refactor-nrepl {:mvn/version "2.3.1"}
-    io.aviso/pretty {:mvn/version "0.1.34"}
+   {io.aviso/pretty {:mvn/version "0.1.34"}
     org.clojure/tools.namespace {:mvn/version "0.2.11"}
     org.clojure/tools.nrepl {:mvn/version "0.2.12"}}}
   :test {:extra-paths ["test"]
@@ -25,8 +23,8 @@
   :dev/nrepl {:jvm-opts ["-Dmarge.load_nrepl=true"]
               :extra-paths ["aliases/nrepl"]
               :extra-deps
-              {cider/cider-nrepl {:mvn/version "0.16.0"}
-               refactor-nrepl {:mvn/version "2.3.1"}
+              {cider/cider-nrepl {:mvn/version "0.17.0"}
+               refactor-nrepl {:mvn/version "2.4.0-SNAPSHOT"}
                com.cemerick/piggieback {:mvn/version "0.2.2"}
                org.clojure/tools.nrepl {:mvn/version "0.2.12"}}}
   :codox {:jvm-opts ["-Dmarge.codox=true"]

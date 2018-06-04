@@ -1,1 +1,0 @@
-(ns test.runner (:require [doo.runner :refer-macros [doo-tests]] marge.core-test) ) (doo-tests 'marge.core-test)

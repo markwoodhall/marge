@@ -1,0 +1,13 @@
+goog.addDependency("base.js", ['goog'], []);
+goog.addDependency("../cljs/core.js", ['cljs.core'], ['goog.string', 'goog.Uri', 'goog.object', 'goog.math.Integer', 'goog.string.StringBuffer', 'goog.array', 'goog.math.Long']);
+goog.addDependency("../clojure/string.js", ['clojure.string'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer']);
+goog.addDependency("../cljs/pprint.js", ['cljs.pprint'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer', 'clojure.string']);
+goog.addDependency("../cljs/test.js", ['cljs.test'], ['cljs.core', 'cljs.pprint', 'clojure.string']);
+goog.addDependency("../jx/reporter/karma.js", ['jx.reporter.karma'], ['cljs.core', 'cljs.test']);
+goog.addDependency("../doo/runner.js", ['doo.runner'], ['cljs.core', 'cljs.test', 'goog.object', 'jx.reporter.karma']);
+goog.addDependency("../marge/util.js", ['marge.util'], ['cljs.core']);
+goog.addDependency("../marge/core.js", ['marge.core'], ['cljs.core', 'marge.util', 'clojure.string']);
+goog.addDependency("../marge/core_test.js", ['marge.core_test'], ['cljs.core', 'cljs.test', 'marge.core']);
+goog.addDependency("../test/runner.js", ['test.runner'], ['doo.runner', 'cljs.core', 'marge.core_test']);
+goog.addDependency("../2B235B9.js", ['cljs.nodejs'], ['cljs.core']);
+goog.addDependency("../AEF573C.js", ['cljs.nodejscli'], ['cljs.core', 'cljs.nodejs', 'goog.object']);

@@ -5,6 +5,5 @@
 (when (System/getProperty "marge.load_nrepl")
   (require 'nrepl))
 
-
 (when (System/getProperty "marge.codox")
   (require 'codox))

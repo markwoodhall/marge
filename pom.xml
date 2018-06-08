@@ -64,5 +64,7 @@
   </licenses>
   <scm>
     <url>https://github.com/markwoodhall/marge</url>
+    <connection>scm:git:git@github.com:markwoodhall/marge.git</connection>
+    <tag>HEAD</tag>
   </scm>
 </project>

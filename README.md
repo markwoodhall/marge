@@ -40,6 +40,25 @@ Markdown generation for Clojure and ClojureScript.
 
 ~~Done this!~~
 
+
+### Strong
+
+```clojure
+(marge/markdown
+ [:strong "Done this!"])
+```
+
+**Done this!**
+
+### Emphasis
+
+```clojure
+(marge/markdown
+ [:em "Done this!"])
+```
+
+*Done this!*
+
 ### Lists
 
 ```clojure

@@ -32,6 +32,14 @@
   [value]
   (str "~~" value "~~"))
 
+(defn- strong
+  [value]
+  (str "**" value "**"))
+
+(defn- emphasis
+  [value]
+  (str "*" value "*"))
+
 (defn- list-
   [depth list-fn v]
   (if (vector? v)
@@ -171,6 +179,10 @@
     :h6 (header 6 value)
     :blockquote (blockquote value)
     :strikethrough (strikethrough value)
+    :i (emphasis value)
+    :em (emphasis value)
+    :strong (strong value)
+    :b (strong value)
     :ol (ordered-list value)
     :ul (unordered-list value)
     :link (link value)

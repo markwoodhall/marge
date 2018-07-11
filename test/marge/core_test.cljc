@@ -47,6 +47,24 @@
     (t/is (= "~~Done this~~"
              (markdown [:strikethrough "Done this"])))))
 
+(t/deftest bold
+  (t/testing "strong produces expected string"
+    (t/is (= "**Done this**"
+             (markdown [:strong "Done this"]))))
+  
+  (t/testing "bold produces expected string"
+    (t/is (= "**Done this**"
+             (markdown [:b "Done this"])))))
+
+(t/deftest emphasis
+  (t/testing "em produces expected string"
+    (t/is (= "*Done this*"
+             (markdown [:em "Done this"]))))
+  
+  (t/testing "italic produces expected string"
+    (t/is (= "*Done this*"
+             (markdown [:i "Done this"])))))
+
 (t/deftest lists
   (t/testing "ordered list produces expected string"
     (t/is (= "1. First item\n2. Second item\n"

@@ -18,7 +18,7 @@
          :main-opts ["-m" "cognitect.test-runner"]}
   :test-cljs
   {:extra-deps
-   {olical/cljs-test-runner {:mvn/version "0.1.0"}}
+   {olical/cljs-test-runner {:mvn/version "1.0.0"}}
    :main-opts ["-m" "cljs-test-runner.main"]}
   :dev/nrepl {:jvm-opts ["-Dmarge.load_nrepl=true"]
               :extra-paths ["aliases/nrepl"]

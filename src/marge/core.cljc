@@ -7,7 +7,7 @@
   You can also view [blog posts] (http://markw.xyz/tags/marge/) about marge
   "
   {:author "Mark Woodhall"}
-  (:require [clojure.string :refer [join triml]]
+  (:require [clojure.string :refer [join triml] :as s]
             [marge.util :refer [balance-at balance-when longest]]))
 
 (declare pair->markdown list- ordered-list unordered-list)
@@ -18,6 +18,21 @@
 (defonce ^:private whitespace " ")
 (defonce ^:private rule (str divider divider divider))
 (defonce ^:private column-start " | ") ;; We trim the leading space when rendering a row
+
+(def ^:private ol-re #"^(\d+)\. ")
+
+(defn- escape-ol
+  "Takes a string s and escapes a dot if neccessary."
+  [s]
+  ;; using fn form here for compat between clj & cljs
+  (s/replace s
+             ol-re
+             (fn [m]
+               (str (second m) "\\. "))))
+
+(defn- paragraph
+  [value]
+  (str (escape-ol value) linebreak))
 
 (defn- header
   [depth value]
@@ -170,7 +185,7 @@
   (case node
     :br (if (= value :br) (str linebreak linebreak) linebreak)
     :hr (if (= value :hr) (str rule linebreak rule) rule)
-    :p (str value linebreak)
+    :p  (paragraph value)
     :h1 (header 1 value)
     :h2 (header 2 value)
     :h3 (header 3 value)

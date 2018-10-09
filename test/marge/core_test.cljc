@@ -5,7 +5,16 @@
 (t/deftest paragraph
   (t/testing "p produces expected string"
     (t/is (= "Paragraph\n"
-             (markdown [:p "Paragraph"])))))
+             (markdown [:p "Paragraph"]))))
+  (t/testing "p escapes unintended ordered list"
+    (t/is (= "1 abc\n"
+             (markdown [:p "1 abc"])))
+    (t/is (= "1\\. abc\n"
+             (markdown [:p "1. abc"])))
+    (t/is (= "9999\\. abc\n"
+             (markdown [:p "9999. abc"])))
+    (t/is (= "9999.abc\n"
+             (markdown [:p "9999.abc"])))))
 
 (t/deftest rulers
   (t/testing "hr produces expected string"

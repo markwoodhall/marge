@@ -235,5 +235,31 @@
                         :ol ["First item" "Second item"]
                         :br
                         :hr
-                        :h2 "Header 2"])))))
-
+                        :h2 "Header 2"]))))
+  
+  (t/testing "link in a paragraph"
+    (t/is (= "When I want to search for things I go to [google](http://google.com)\n"
+             (markdown [:p 
+                        [:normal "When I want to search for things I go to "
+                         :link {:url "http://google.com" :text "google"}]]))))
+  
+  (t/testing "em link in a paragraph"
+    (t/is (= "When I want to search for things I go to *[google](http://google.com)*\n"
+             (markdown [:p 
+                        [:normal "When I want to search for things I go to "
+                         :em [:link {:url "http://google.com" :text "google"}]]]))))
+  
+  (t/testing "unordered list with links produces expected string"
+    (t/is (= "+ [link1](http://google.com)\n+ [link2](http://bing.com)\n"
+             (markdown [:ul [:link {:url "http://google.com" :text "link1"} 
+                             :link {:url "http://bing.com" :text "link2"}]]))))
+  
+  (t/testing "ordered list with links produces expected string"
+    (t/is (= "1. [link1](http://google.com)\n2. [link2](http://bing.com)\n"
+             (markdown [:ol [:link {:url "http://google.com" :text "link1"} 
+                             :link {:url "http://bing.com" :text "link2"}]]))))
+  
+  (t/testing "ordered list with em produces expected string"
+    (t/is (= "1. *Hello*\n2. *World*\n"
+             (markdown [:ol [:em "Hello" 
+                             :em "World"]])))))

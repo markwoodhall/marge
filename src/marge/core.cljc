@@ -195,6 +195,7 @@
     :blockquote (blockquote value)
     :strikethrough (strikethrough value)
     :i (emphasis value)
+    :normal value
     :em (emphasis value)
     :strong (strong value)
     :b (strong value)
@@ -212,5 +213,14 @@
   (->> col
        (balance-at #{:br :hr})
        (partition 2)
-       (map pair->markdown)
+       (map (fn [pair] 
+              (if (and (sequential? (last pair))
+                       (keyword? (first (last pair))))
+                (str 
+                  (pair->markdown 
+                    [(first pair) 
+                     (case (first pair)
+                       (:ul :ol) (map markdown (partition 2 (balance-at #{:br :hr} (last pair))))
+                       (markdown (last pair)))]))
+                (pair->markdown pair))))
        (join)))

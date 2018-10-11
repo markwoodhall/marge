@@ -31,6 +31,15 @@ Markdown generation for Clojure and ClojureScript.
 
 > Something quote worthy!
 
+### Normal
+
+```clojure
+(marge/markdown
+ [:normal "Done this!"])
+```
+
+Done this!
+
 ### Strikethrough
 
 ```clojure
@@ -183,8 +192,7 @@ Sometimes you might want to place an anchor that you link to later.
 ### Composition
 
 ```clojure
-(markdown 
- [:h1 "Header"
-  :ol ["First item" "Second item"]
-  :h2 "Header 2"])
+(markdown [:p 
+           [:normal "When I want to search for things I go to "
+            :em [:link {:url "http://google.com" :text "google"}]]])
 ```

@@ -206,21 +206,28 @@
     :code (code value)
     :table (table value)))
 
+(defn- prepare-col
+  "Prepares a col representing markdown structure by first balancing it
+  at keys that might not contain a value, e.g. `:br` and `:hr`, and then
+  partitions the col into key value pairs."
+  [col]
+  (->> col
+       (balance-at #{:br :hr})
+       (partition 2)))
+
 (defn markdown
   "Takes a sequence of nodes and produces markdown."
   {:added "0.1.0"}
   [col]
   (->> col
-       (balance-at #{:br :hr})
-       (partition 2)
+       prepare-col
        (map (fn [pair] 
               (if (and (sequential? (last pair))
                        (keyword? (first (last pair))))
-                (str 
-                  (pair->markdown 
+                (pair->markdown 
                     [(first pair) 
                      (case (first pair)
-                       (:ul :ol) (map markdown (partition 2 (balance-at #{:br :hr} (last pair))))
-                       (markdown (last pair)))]))
+                       (:ul :ol) (map markdown (prepare-col (last pair)))
+                       (markdown (last pair)))])
                 (pair->markdown pair))))
-       (join)))
+       join))

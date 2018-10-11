@@ -1,6 +1,6 @@
 # Change Log
 
-### 0.15.0 (??-10-2018)
+### 0.15.0 (11-10-2018)
 
 * Better support for node composition.
 

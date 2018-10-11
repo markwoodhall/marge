@@ -2,7 +2,7 @@
   "The core namespace contains all of the functions for rendering clojure data structures as
   markdown.
 
-  The API documentation is available [here](http://markwoodhall.github.io/marge/).
+  The API documentation is available on [cljdoc](https://cljdoc.xyz/d/marge/marge).
 
   You can also view [blog posts] (http://markw.xyz/tags/marge/) about marge
   "

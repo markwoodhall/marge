@@ -19,4 +19,3 @@
   (if (empty? col) 
     0 
     (apply max (map (comp count str) col))))
-

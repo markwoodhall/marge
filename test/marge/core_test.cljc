@@ -226,6 +226,13 @@
                          "Price"
                          []]])))))
 
+(t/deftest embedded-html
+  (t/testing "nodes with embedded html return expected result"
+    (t/is (= "When I want to search for things I go to <a href=\"http://google.com\">google</a>\n"
+             (markdown [:p 
+                        [:normal "When I want to search for things I go to "
+                         :html [:a {:href "http://google.com"} "google"]]])))))
+
 (t/deftest composing-nodes
   (t/testing "composing multiple nodes with line breaks"
     (t/is (= "# Header\n\n\n---1. First item\n2. Second item\n\n---## Header 2\n"

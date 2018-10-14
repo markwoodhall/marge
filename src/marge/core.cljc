@@ -7,8 +7,17 @@
   You can also view [blog posts] (http://markw.xyz/tags/marge/) about marge
   "
   {:author "Mark Woodhall"}
-  (:require [clojure.string :refer [join triml] :as s]
-            [marge.util :refer [balance-at balance-when longest]]))
+  #?@(:cljs 
+       [(:require-macros [hiccups.core :as hiccups :refer [html]])
+        (:require 
+          [clojure.string :as s]
+          [marge.util :refer [balance-at balance-when longest]]
+          [hiccups.runtime :as hiccupsrt])]
+       :clj
+       [(:require 
+           [clojure.string  :as s]
+           [marge.util :refer [balance-at balance-when longest]]
+           [hiccup.core :refer [html]])]))
 
 (declare pair->markdown list- ordered-list unordered-list)
 
@@ -36,7 +45,7 @@
 
 (defn- header
   [depth value]
-  (let [hashes (join (repeat depth "#"))]
+  (let [hashes (s/join (repeat depth "#"))]
     (str hashes whitespace value linebreak)))
 
 (defn- blockquote
@@ -61,8 +70,8 @@
     (case (first v)
       :ol (ordered-list (second v) (inc depth))
       :ul (unordered-list (second v) (inc depth))
-      (list-fn (join (repeat (* depth 2) whitespace)) (pair->markdown v)))
-    (let [padding (join (repeat (* depth 2) whitespace))]
+      (list-fn (s/join (repeat (* depth 2) whitespace)) (pair->markdown v)))
+    (let [padding (s/join (repeat (* depth 2) whitespace))]
       (list-fn padding v))))
 
 (defn- list-entry
@@ -85,7 +94,7 @@
          list-fn (partial list- depth (comp position-fn render-fn))]
      (->> col
           (map list-fn)
-          (join)))))
+          s/join))))
 
 (defn- unordered-list
   ([col]
@@ -93,8 +102,8 @@
   ([col depth]
    (->> col
         (map
-         (partial list- depth #(str %1 "+ " (list-entry %2) linebreak)))
-        (join))))
+          (partial list- depth #(str %1 "+ " (list-entry %2) linebreak)))
+        s/join)))
 
 (defn- link
   [{:keys [text url title]}]
@@ -124,7 +133,7 @@
   [padding value]
   (->> (str value padding)
        (take (count padding))
-       (join)))
+       s/join))
 
 (defn- end-row
   [s]
@@ -156,17 +165,17 @@
         col-length (count column)
         max-data-length (longest parsed-cells)
         max-length (max col-length max-data-length)
-        divider (join (repeat max-length divider))
-        padding (join (repeat max-length whitespace))]
+        divider (s/join (repeat max-length divider))
+        padding (s/join (repeat max-length whitespace))]
     {:header (col padding column)
      :divider (col padding divider)
      :cells (map (partial col padding) parsed-cells)}))
 
 (defn- row
   [cells]
-  (->> (join cells)
+  (->> (s/join cells)
        (end-row)
-       (triml)))
+       s/triml))
 
 (defn- table
   [value]
@@ -178,7 +187,7 @@
     (str
      (row (map :header columns))
      (row (map :divider columns))
-     (join rows))))
+     (s/join rows))))
 
 (defn- pair->markdown
   [[node value]]
@@ -204,7 +213,8 @@
     :link (link value)
     :anchor (anchor value)
     :code (code value)
-    :table (table value)))
+    :table (table value)
+    :html (html value)))
 
 (defn- prepare-col
   "Prepares a col representing markdown structure by first balancing it
@@ -223,11 +233,12 @@
        prepare-col
        (map (fn [pair] 
               (if (and (sequential? (last pair))
-                       (keyword? (first (last pair))))
+                       (keyword? (first (last pair)))
+                       (not= (first pair) :html))
                 (pair->markdown 
-                    [(first pair) 
-                     (case (first pair)
-                       (:ul :ol) (map markdown (prepare-col (last pair)))
-                       (markdown (last pair)))])
+                  [(first pair) 
+                   (case (first pair)
+                     (:ul :ol) (map markdown (prepare-col (last pair)))
+                     (markdown (last pair)))])
                 (pair->markdown pair))))
-       join))
+       s/join))

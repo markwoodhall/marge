@@ -189,6 +189,18 @@ Sometimes you might want to place an anchor that you link to later.
 | ----- | ----------- |
 | link  | [text](url) |
 
+### HTML Inside Markdown
+
+You can generate html inside your markdown using Hiccup syntax, the rendering for this uses Hiccup for Clojure or Hiccups for ClojureScript.
+
+```clojure
+(markdown [:p 
+           [:normal "When I want to search for things I go to "
+            :html [:a {:href "http://google.com"} "google"]]])
+```
+
+When I want to search for things I go to <a href="http://google.com">google</a>
+
 ### Composition
 
 ```clojure

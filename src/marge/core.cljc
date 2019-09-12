@@ -34,10 +34,12 @@
   "Takes a string s and escapes a dot if neccessary."
   [s]
   ;; using fn form here for compat between clj & cljs
-  (s/replace s
-             ol-re
-             (fn [m]
-               (str (second m) "\\. "))))
+  (if s
+    (s/replace s
+               ol-re
+               (fn [m]
+                 (str (second m) "\\. ")))
+    s))
 
 (defn- paragraph
   [value]

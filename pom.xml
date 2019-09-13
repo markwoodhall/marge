@@ -16,6 +16,16 @@
       <artifactId>clojurescript</artifactId>
       <version>1.9.946</version>
     </dependency>
+    <dependency>
+      <groupId>hiccup</groupId>
+      <artifactId>hiccup</artifactId>
+      <version>1.0.5</version>
+    </dependency>
+    <dependency>
+      <groupId>hiccups</groupId>
+      <artifactId>hiccups</artifactId>
+      <version>0.3.0</version>
+    </dependency>
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>

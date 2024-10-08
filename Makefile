@@ -8,6 +8,9 @@ test-clj:
 test-cljs:
 	clojure -A:test-cljs
 
+pom:
+	clj -Spom
+
 deploy: test
 	clj -Spom
 	mvn deploy

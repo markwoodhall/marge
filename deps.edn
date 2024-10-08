@@ -1,10 +1,10 @@
 {:paths ["src"]
  :deps
- {org.clojure/clojure {:mvn/version "1.9.0"}
-  org.clojure/clojurescript {:mvn/version "1.9.946"}
-  
-  hiccup {:mvn/version "1.0.5"}
-  hiccups {:mvn/version "0.3.0"}}
+ {org.clojure/clojure {:mvn/version "1.11.2"}
+  org.clojure/clojurescript {:mvn/version "1.11.132"}
+
+  hiccup/hiccup {:mvn/version "1.0.5"}
+  hiccups/hiccups {:mvn/version "0.3.0"}}
 
  :aliases
  {:dev

@@ -15,3 +15,5 @@ pom.xml.asc
 .cljs_rhino_repl/
 .cpcache
 cljs-test-runner-out
+/.clj-kondo/
+/.lsp/

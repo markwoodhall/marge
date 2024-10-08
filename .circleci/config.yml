@@ -1,0 +1,21 @@
+# Clojure CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-clojure/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/clojure:tools-deps
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+
+    steps:
+      - checkout
+      - run: sudo apt-get update
+      - run: sudo apt-get install nodejs
+      - run: make test

@@ -3,7 +3,7 @@ Markdown generation for Clojure and ClojureScript.
 
 ## Status
 
-[![Build Status](https://api.travis-ci.org/markwoodhall/marge.svg?branch=master)](https://api.travis-ci.org/repositories/markwoodhall/marge)
+[![CircleCI](https://circleci.com/gh/markwoodhall/marge.svg?style=svg)](https://circleci.com/gh/markwoodhall/marge)
 [![Clojars Project](https://img.shields.io/clojars/v/marge.svg)](http://clojars.org/marge)
 
 ## Usage

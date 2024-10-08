@@ -1,4 +1,4 @@
-.PHONY: test test-clj test-cljs
+.PHONY: test test-clj test-cljs pom
 
 test: test-clj test-cljs
 
@@ -9,8 +9,8 @@ test-cljs:
 	clojure -A:test-cljs
 
 pom:
-	clj -Spom
+	clojure -Spom
 
 deploy: test
-	clj -Spom
+	clojure -Spom
 	mvn deploy
